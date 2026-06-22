@@ -20,7 +20,10 @@
                     <label>Customer Name</label>
                     <input type="text" placeholder="Enter Customer Name">
                 </div>
-
+                <div class="form-group">
+                    <label>Doctor Name</label>
+                    <input type="text" placeholder="Enter Doctor Name">
+                </div>
                 <div class="form-group">
                     <label>Medicine Name</label>
                     <input type="text" placeholder="e.g., Lactogen">
@@ -33,10 +36,7 @@
                     <label>MRP (₹)</label>
                     <input type="number" step="0.01" placeholder="Enter MRP">
                 </div>
-                <div class="form-group">
-                    <label>Discount (%)</label>
-                    <input type="number" step="0.01" placeholder="Enter MRP">
-                </div>
+    
                 <div class="form-group">
                     <label>Batch Number</label>
                     <input type="text" placeholder="Enter Batch">
@@ -70,6 +70,7 @@
                 <div class="patient-details">
                     <h3>Invoice / Bill Receipt</h3>
                     <p><strong>Customer Name:</strong> <span id="preview-patient">-</span></p>
+                    <p><strong>Doctor Name:</strong> <span id="preview-patient">-</span></p>
                     <p><strong>Date:</strong> <span id="daate"></span></p>
                     <p><strong>Serial No.-</strong> <span id="serialnumber"></span></p>
                 </div>
@@ -81,7 +82,6 @@
                         <th>Items</th>
                         <th>Quantity</th>
                         <th>Batch</th>
-                        <th>Discount</th>
                         <th>Expiry</th>
                         <th>MRP</th>
                     

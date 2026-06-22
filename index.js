@@ -1,18 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Select Form Inputs (Mapped exactly to your new HTML order)
+    // 1. Select Form Inputs (Mapped exactly to your 9 inputs)
     const inputs = document.querySelectorAll(".form-group input");
     const customerInput = inputs[0]; // Customer Name
-    const medicineInput = inputs[1]; // Medicine Name
-    const quantityInput = inputs[2]; // Quantity
-    const mrpInput = inputs[3];      // MRP
-    const discountInput = inputs[4]; // Discount (%)
+    const doctorInput = inputs[1];   // Doctor Name
+    const medicineInput = inputs[2]; // Medicine Name
+    const quantityInput = inputs[3]; // Quantity
+    const mrpInput = inputs[4];      // MRP
     const batchInput = inputs[5];    // Batch Number
     const expiryInput = inputs[6];   // Expiry Date
     const serialInput = inputs[7];   // Serial No.
     const dateInput = inputs[8];     // Date
 
     // 2. Select Invoice Preview Elements
-    const previewCustomer = document.getElementById("preview-patient");
+    // Using querySelectorAll to bypass the duplicate "preview-patient" ID bug in your HTML
+    const patientDetailsSpans = document.querySelectorAll(".patient-details span");
+    const previewCustomer = patientDetailsSpans[0]; 
+    const previewDoctor = patientDetailsSpans[1];   
     const previewDate = document.getElementById("daate");
     const previewSerial = document.getElementById("serialnumber");
     
@@ -26,8 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 4. Add Click Event to the Button
     addButton.addEventListener("click", () => {
         // --- Update Invoice Header Details ---
-        previewCustomer.textContent = customerInput.value || "-";
-        previewSerial.textContent = serialInput.value || "-";
+        if (previewCustomer) previewCustomer.textContent = customerInput.value || "-";
+        if (previewDoctor) previewDoctor.textContent = doctorInput.value || "-";
+        if (previewSerial) previewSerial.textContent = serialInput.value || "-";
         
         // Format the date to standard Indian format (DD/MM/YYYY)
         if (dateInput.value) {
@@ -41,48 +45,41 @@ document.addEventListener("DOMContentLoaded", () => {
         const medicineName = medicineInput.value.trim();
         const quantity = parseInt(quantityInput.value) || 0;
         const mrp = parseFloat(mrpInput.value) || 0;
-        const discountPercent = parseFloat(discountInput.value) || 0;
         const batch = batchInput.value.trim() || "-";
         const expiry = expiryInput.value.trim() || "-";
 
-        // Basic Validation: Stop if required item fields are empty
+        // Basic Validation
         if (!medicineName || quantity <= 0 || mrp <= 0) {
             alert("Please enter a valid Medicine Name, Quantity, and MRP.");
-            return; // Stop function execution
+            return; 
         }
 
-        // --- Calculate Amount with Discount ---
-        const grossAmount = quantity * mrp;
-        const discountValue = grossAmount * (discountPercent / 100);
-        const itemAmount = grossAmount - discountValue;
-        
-        // Add to total bill amount
+        // --- Calculate Amount ---
+        const itemAmount = quantity * mrp;
         totalBillAmount += itemAmount;
 
         // --- Create and Add to Table ---
+        // Your table has exactly 6 columns: Items, Quantity, Batch, Expiry, MRP, Amount
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${medicineName}</td>
             <td>${quantity}</td>
             <td>${batch}</td>
-            <td>${discountPercent}%</td>
             <td>${expiry}</td>
             <td>₹${mrp.toFixed(2)}</td>
             <td class="text-right">₹${itemAmount.toFixed(2)}</td>
         `;
         
-        // Append row to the table body
         tableBody.appendChild(row);
 
-        // Update the Total Amount in the footer
+        // Update the Total Amount
         totalAmountCell.textContent = `₹${totalBillAmount.toFixed(2)}`;
 
         // --- Auto-Clear Item Inputs ---
-        // Clears the medicine info for the next item, leaving Customer, Serial, and Date intact.
+        // Clears the medicine inputs so you can quickly type the next item
         medicineInput.value = "";
         quantityInput.value = "";
         mrpInput.value = "";
-        discountInput.value = "";
         batchInput.value = "";
         expiryInput.value = "";
     });
